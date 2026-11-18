@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>小芽背单词 · 听读岛页面设计 v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#3B3226; --ink2:#8A7A62; --ink3:#B4A288;
+  --line:#6B4E2E; --line-s:#8A6B45;
+  --cream:#FBF3E4; --paper:#FFFDF7;
+  --sky1:#A8E4F5; --sky2:#DCF2F8; --sky3:#EFF8FA;
+  --sand:#F5DFA8; --sand-d:#E7CB8E;
+  --green:#8ED860; --green-d:#6EC24A; --mint:#A8E6CF;
+  --yellow:#FFD86B; --yellow-d:#F0B93E; --blue:#9BDCFF; --pink:#FFB7C5; --purple:#C9B8F0;
+  --r:26px; --rs:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--cream);color:var(--ink);
+  font-family:"PingFang SC","Noto Sans SC","Microsoft YaHei",-apple-system,sans-serif;
+  padding:44px 32px 80px;-webkit-font-smoothing:antialiased}
+.en{font-family:"Baloo 2","Nunito","PingFang SC",sans-serif}
+
+/* ---------- 页面标题 ---------- */
+.page-head{max-width:1400px;margin:0 auto 34px}
+.page-head .kicker{display:inline-block;padding:7px 16px;border-radius:14px;background:var(--ink);color:#FFF7E0;
+  font-size:13px;font-weight:800;letter-spacing:2px}
+.page-head h1{margin-top:16px;font-size:40px;font-weight:900;letter-spacing:-.5px}
+.page-head h1 em{font-style:normal;color:var(--green-d)}
+.page-head p{margin-top:12px;font-size:16px;line-height:1.85;color:var(--ink2);max-width:900px;font-weight:600}
+.legend{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+.legend span{padding:7px 13px;border-radius:12px;background:#fff;border:2px solid #E4D6BC;font-size:13px;font-weight:800;color:var(--ink2)}
+
+/* ---------- 舞台 ---------- */
+.stage{max-width:1400px;margin:0 auto;display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}
+.col{display:flex;flex-direction:column;gap:14px;align-items:center}
+.col-cap{font-size:15px;font-weight:900;color:var(--ink);background:#fff;border:2px solid #E4D6BC;
+  border-radius:14px;padding:9px 16px;display:flex;align-items:center;gap:9px}
+.col-cap i{font-style:normal;font-size:17px}
+.col-cap s{text-decoration:none;color:var(--ink3);font-weight:700;font-size:13px}
+
+/* ---------- 手机 ---------- */
+.device{padding:11px;border-radius:54px;background:linear-gradient(160deg,#5A4B36,#2C2419);
+  box-shadow:0 22px 44px #6B4E2E2E, inset 0 1px 0 #ffffff30;flex:0 0 auto}
+.device-inner{width:375px;height:812px;border-radius:44px;overflow:hidden;position:relative;
+  background:var(--paper);display:flex;flex-direction:column}
+.statusbar{height:44px;flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
+  padding:0 26px;font-size:13px;font-weight:900;color:var(--ink);position:relative;z-index:9}
+.body{position:relative;flex:1;overflow:hidden;display:flex;flex-direction:column}
+
+/* 通用组件 */
+.nav{display:flex;align-items:center;gap:10px;padding:0 18px 8px;position:relative;z-index:8}
+.back{width:36px;height:36px;border-radius:13px;background:#fff;border:3px solid var(--line);box-shadow:0 3px 0 var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:var(--line);flex:0 0 auto}
+.seg{flex:1;display:flex;background:#fff;border:3px solid var(--line);border-radius:16px;box-shadow:0 3px 0 var(--line);
+  padding:3px;gap:3px}
+.seg span{flex:1;text-align:center;font-size:15px;font-weight:900;color:var(--ink2);padding:6px 0;border-radius:12px}
+.seg span.on{background:var(--yellow);color:var(--ink);box-shadow:inset 0 -3px 0 #E9B93C}
+.coin{padding:7px 11px;border-radius:13px;background:#fff;border:3px solid var(--line);box-shadow:0 3px 0 var(--line);
+  font-size:14px;font-weight:900;white-space:nowrap}
+
+.hud{display:flex;align-items:center;gap:10px;padding:4px 18px 0;position:relative;z-index:8}
+.ava{width:42px;height:42px;border-radius:15px;background:#fff;border:3px solid var(--line);box-shadow:0 3px 0 var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:24px;flex:0 0 auto}
+.hud .nm{flex:1;min-width:0}
+.hud .nm b{display:block;font-size:16px;font-weight:900;line-height:1.15}
+.hud .nm span{display:block;font-size:12px;font-weight:800;color:var(--ink2)}
+.chip{padding:6px 10px;border-radius:12px;background:#fff;border:3px solid var(--line);box-shadow:0 3px 0 var(--line);
+  font-size:13px;font-weight:900;white-space:nowrap}
+
+/* 场景标题 */
+.scene-title{padding:10px 20px 0;position:relative;z-index:8}
+.scene-title .tag{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:12px;
+  background:var(--ink);color:#FFF7E0;font-size:13px;font-weight:900;letter-spacing:1px}
+.scene-title h2{margin-top:8px;font-size:27px;font-weight:900;line-height:1.25;letter-spacing:-.5px}
+.scene-title h2 u{text-decoration:none;color:var(--green-d)}
+.scene-title .sub{margin-top:7px;font-size:14px;font-weight:800;color:var(--ink2);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+/* 灯光/进度 */
+.lamps{display:flex;gap:7px;align-items:center;margin-top:12px}
+.lamp{width:24px;height:27px;border-radius:9px 9px 12px 12px;background:#fff;border:3px solid var(--line);position:relative}
+.lamp.on{background:var(--yellow);box-shadow:0 0 14px #FFD86BAA}
+.lamp.on::after{content:"";position:absolute;left:50%;top:-9px;transform:translateX(-50%);width:3px;height:8px;background:var(--line)}
+.lamp::after{content:"";position:absolute;left:50%;top:-9px;transform:translateX(-50%);width:3px;height:8px;background:var(--line)}
+.lamps .lbl{font-size:12px;font-weight:800;color:var(--ink2);margin-left:4px}
+
+/* 主卡 */
+.card{background:#fff;border:4px solid var(--line);border-radius:var(--r);box-shadow:0 7px 0 var(--line)}
+.card-h{display:flex;align-items:center;justify-content:space-between;padding:12px 15px 0}
+.card-h b{font-size:15px;font-weight:900}
+.pill{padding:6px 11px;border-radius:11px;background:var(--sky2);border:2.5px solid var(--line-s);font-size:12px;font-weight:900;color:var(--line)}
+
+/* 喇叭播放器 */
+.player{padding:12px 14px 10px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.speaker{width:76px;height:76px;border-radius:50%;background:var(--yellow);border:4px solid var(--line);
+  box-shadow:0 6px 0 var(--line);display:flex;align-items:center;justify-content:center;position:relative}
+.speaker .tri{margin-left:5px;width:0;height:0;border-left:23px solid var(--ink);border-top:15px solid transparent;border-bottom:15px solid transparent}
+.speaker .rip{position:absolute;inset:-12px;border-radius:50%;border:4px solid var(--line);opacity:.25}
+.speaker .rip.b{inset:-24px;opacity:.12}
+.speaker:active{transform:translateY(4px);box-shadow:0 3px 0 var(--line)}
+.wave{display:flex;align-items:center;gap:5px;height:22px}
+.wave i{width:5px;border-radius:3px;background:var(--green-d);display:block}
+.wave i:nth-child(1){height:9px}.wave i:nth-child(2){height:17px}.wave i:nth-child(3){height:25px}
+.wave i:nth-child(4){height:15px}.wave i:nth-child(5){height:21px}.wave i:nth-child(6){height:11px}
+.wave i:nth-child(7){height:18px}.wave i:nth-child(8){height:8px}
+.wave.play i{animation:bounce .9s ease-in-out infinite}
+.wave i:nth-child(2n){animation-delay:.12s}.wave i:nth-child(3n){animation-delay:.24s}
+@keyframes bounce{0%,100%{transform:scaleY(.45)}50%{transform:scaleY(1)}}
+.bubble{background:var(--sky3);border:3px solid var(--line-s);border-radius:17px;padding:7px 12px;
+  display:flex;align-items:center;gap:9px;box-shadow:0 4px 0 #C9B48F}
+.bubble .who{width:30px;height:30px;border-radius:10px;background:var(--yellow);border:3px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 auto}
+.bubble p{font-size:13.5px;font-weight:800;line-height:1.4;color:var(--ink)}
+.bubble p i{font-style:normal;color:var(--ink3)}
+
+/* 选项词卡 */
+.opts{display:flex;gap:8px;padding:0 12px 10px}
+.opt{flex:1;background:#fff;border:3.5px solid var(--line);border-radius:16px;box-shadow:0 4px 0 var(--line);
+  padding:8px 4px 7px;text-align:center;position:relative}
+.opt .ic{height:28px;display:flex;align-items:center;justify-content:center;font-size:23px}
+.opt .w{font-size:15px;font-weight:900;margin-top:2px;letter-spacing:.2px}
+.opt .ph{font-size:11.5px;font-weight:800;color:var(--ink3);margin-top:2px}
+.opt.ok{background:var(--mint);border-color:#3F8F63;box-shadow:0 5px 0 #3F8F63}
+.opt.ok::after{content:"✓";position:absolute;right:7px;top:6px;width:23px;height:23px;border-radius:50%;
+  background:#3F8F63;color:#fff;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.opt.bad{opacity:.42;filter:grayscale(.7)}
+.opt.soft{background:var(--sky3)}
+
+.btn{display:block;width:100%;text-align:center;padding:13px;border-radius:22px;background:var(--yellow);
+  border:4px solid var(--line);box-shadow:0 7px 0 var(--line);font-size:18px;font-weight:900;color:var(--ink);cursor:pointer}
+.btn.green{background:var(--green)}
+.btn.blue{background:var(--blue)}
+.btn:active{transform:translateY(4px);box-shadow:0 3px 0 var(--line)}
+.reward-strip{display:flex;align-items:center;gap:8px;margin:0 12px 12px;padding:7px 12px;border-radius:14px;
+  background:var(--yellow);border:3px solid var(--line);font-size:13px;font-weight:900;line-height:1.3}
+.reward-strip b{margin-left:auto;font-size:14px;white-space:nowrap;color:#8A6B1E}
+.foot{padding:10px 18px 14px;margin-top:auto;position:relative;z-index:8}
+
+/* 阅读：书 */
+.book-hero{display:flex;gap:14px;align-items:center}
+.cover{width:82px;height:104px;border-radius:14px;flex:0 0 auto;position:relative;overflow:hidden;
+  border:4px solid var(--line);box-shadow:0 6px 0 var(--line);background:linear-gradient(180deg,#BFE9FF,#8FD3F0)}
+.cover .tagx{position:absolute;left:7px;top:7px;font-size:10px;font-weight:900;background:#fff;
+  border:2px solid var(--line);border-radius:7px;padding:2px 6px;color:var(--line)}
+.bookmeta b{display:block;font-size:18px;font-weight:900;line-height:1.25}
+.bookmeta .cn{font-size:14px;font-weight:800;color:var(--ink2);margin-top:2px}
+.meta-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.mtag{font-size:11.5px;font-weight:900;padding:4px 8px;border-radius:9px;background:var(--cream);
+  border:2px solid #E4D6BC;color:var(--ink2)}
+
+/* 正文 */
+.passage{padding:14px 16px}
+.pline{margin-bottom:9px;padding-bottom:9px;border-bottom:2px dashed #EFE3CB}
+.pline:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.en-line{font-size:15.5px;font-weight:900;line-height:1.45}
+.cn-line{font-size:13px;font-weight:700;color:var(--ink2);line-height:1.45;margin-top:3px}
+.hl{background:var(--yellow);border-radius:5px;padding:0 3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.hl.on{background:var(--green)}
+.spk{font-size:13px;vertical-align:2px;margin-left:4px;opacity:.6}
+
+/* 词卡气泡 */
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:4px solid var(--line);
+  border-radius:24px 24px 0 0;padding:11px 16px 15px;box-shadow:0 -10px 26px #6B4E2E26}
+.sheet .grab{width:44px;height:5px;border-radius:3px;background:#E4D6BC;margin:0 auto 9px}
+.wordrow{display:flex;align-items:baseline;gap:10px}
+.wordrow b{font-size:23px;font-weight:900}
+.wordrow span{font-size:14px;font-weight:800;color:var(--ink2)}
+.pos{margin-left:auto;font-size:11.5px;font-weight:900;padding:4px 9px;border-radius:9px;background:var(--sky2);
+  border:2px solid var(--line-s);color:var(--line)}
+.sense{margin-top:7px;font-size:14.5px;font-weight:800;line-height:1.5}
+.sense em{font-style:normal;color:var(--ink3);font-weight:700;font-size:13px}
+.sheet-acts{display:flex;gap:9px;margin-top:10px}
+.mini{flex:1;padding:9px;border-radius:15px;background:var(--cream);border:3px solid var(--line);
+  box-shadow:0 4px 0 var(--line);font-size:14px;font-weight:900;text-align:center}
+
+/* 底部 mini 进度 */
+.dots{display:flex;gap:6px;justify-content:center;margin-bottom:9px}
+.dots i{width:9px;height:9px;border-radius:50%;background:#E4D6BC;border:2px solid var(--line-s)}
+.dots i.on{background:var(--green);width:22px;border-radius:6px}
+.dots i.bad{background:var(--pink)}
+
+/* ---------- 组件表 ---------- */
+.sheet-wrap{max-width:1400px;margin:60px auto 0}
+.sec-title{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.sec-title h3{font-size:24px;font-weight:900}
+.sec-title s{text-decoration:none;font-size:12px;font-weight:900;color:#fff;background:var(--ink);
+  border-radius:8px;padding:4px 9px;letter-spacing:1px}
+.sec-note{font-size:14px;color:var(--ink2);font-weight:700;margin-bottom:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.tile{background:#fff;border:4px solid var(--line);border-radius:22px;box-shadow:0 6px 0 var(--line);padding:16px}
+.tile h4{font-size:16px;font-weight:900;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.tile h4 em{font-style:normal;font-size:11.5px;font-weight:900;color:#fff;background:var(--line-s);
+  border-radius:7px;padding:3px 7px}
+.tile p{font-size:13px;font-weight:700;color:var(--ink2);line-height:1.6}
+.demo{margin-top:12px;background:var(--cream);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px}
+.demo .face{width:46px;height:46px;border-radius:15px;border:3px solid var(--line);display:flex;align-items:center;
+  justify-content:center;font-size:24px;flex:0 0 auto;background:#fff}
+
+/* ---------- 说明表 ---------- */
+.tb-wrap{max-width:1400px;margin:60px auto 0}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13.5px;background:#fff;
+  border:3px solid var(--line);border-radius:18px;overflow:hidden}
+th,td{padding:12px 14px;text-align:left;border-bottom:2px solid #F1E6D2;vertical-align:top;line-height:1.65}
+th{background:#FFF4DA;font-weight:900;font-size:13px;color:var(--ink);border-bottom:3px solid var(--line)}
+tr:last-child td{border-bottom:none}
+td b{font-weight:900}
+code{background:#F5EEDF;border:2px solid #E4D6BC;border-radius:6px;padding:1px 6px;font-size:12px;
+  font-family:ui-monospace,Consolas,monospace}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0 6px}
+.flow b{font-size:13px;font-weight:900;padding:8px 13px;border-radius:12px;background:#fff;border:3px solid var(--line);
+  box-shadow:0 3px 0 var(--line)}
+.flow s{text-decoration:none;color:var(--ink3);font-weight:900;font-size:15px}
+.footer-note{margin-top:50px;text-align:center;font-size:12.5px;color:var(--ink3);font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <span class="kicker">小芽背单词 · 单词岛 / 新模块设计 v1</span>
+  <h1>「听读岛」— 听力训练 &amp; 阅读页面</h1>
+  <p>一个页面、两种模式：顶部切换「听一听」与「读一读」。两条线共用同一套世界观资源（金币 / 小花 / 伙伴）、同一个入口页与同一套奖励结算。听力练"听得准"，阅读练"读得懂"，两者都以"收集"为驱动，不做纯功能罗列。</p>
+  <div class="legend">
+    <span>沿用 H 暖岛手绘：4px 厚描边 + 硬阴影</span>
+    <span>动词化文案：听一听 / 读一读 / 点亮 / 收集</span>
+    <span>主色：暖岛天蓝 · 沙黄 · 草绿</span>
+    <span>生态：🪙 金币 / 🌸 小花 / 🧒 小明 / 🐱 喵喵</span>
+    <span>375×812 @1x（可按 2× 导出 750×1624）</span>
+  </div>
+</div>
+
+<div class="stage">
+
+  <!-- ============ 页面 1：听力训练 ============ -->
+  <div class="col">
+    <div class="col-cap"><i>🔊</i> 页面 1 · 听力训练 <s>听一听</s></div>
+    <div class="device"><div class="device-inner">
+
+      <div class="statusbar"><span class="en">9:41</span><span class="en">▮▮▮ ⌁ ▰</span></div>
+
+      <div class="body" style="background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 34%,var(--sky3) 58%,#EAF7EC 100%)">
+        <!-- 场景装饰：远山 + 草地 -->
+        <svg viewBox="0 0 375 812" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">
+          <circle cx="308" cy="118" r="34" fill="#FFF3C0" opacity=".9"/>
+          <path d="M0 470 Q70 416 128 468 Q190 424 250 470 Q310 432 375 472 L375 812 L0 812Z" fill="#B7E3C9" opacity=".8"/>
+          <path d="M0 520 Q60 486 120 522 Q190 482 250 520 Q310 490 375 524 L375 812 L0 812Z" fill="#9BD9B4" opacity=".75"/>
+          <path d="M-10 596 Q120 566 200 596 Q300 628 390 588 L390 812 L-10 812Z" fill="#8ED860"/>
+          <path d="M-10 596 Q120 566 200 596 Q300 628 390 588" fill="none" stroke="#6EC24A" stroke-width="4"/>
+          <circle cx="36" cy="574" r="8" fill="#FFB7C5"/><circle cx="62" cy="580" r="6" fill="#FFD86B"/>
+          <circle cx="336" cy="566" r="8" fill="#FFB7C5"/><circle cx="358" cy="574" r="6" fill="#FFF"/>
+          <circle cx="92" cy="612" r="6" fill="#C9B8F0"/>
+        </svg>
+
+        <div class="nav">
+          <div class="back">‹</div>
+          <div class="seg"><span class="on">👂 听一听</span><span>📖 读一读</span></div>
+          <div class="coin">🪙 1280</div>
+        </div>
+
+        <div class="hud">
+          <div class="ava">🧒</div>
+          <div class="nm"><b>小明</b><span>小耳朵 Lv.4 · 今天已听 12 句</span></div>
+          <div class="chip">💎 5</div>
+        </div>
+
+        <div class="scene-title">
+          <span class="tag">🔊 回声谷 · 第 3 关</span>
+          <h2>再听 <u>6 句</u>，点亮山谷</h2>
+          <div class="sub">
+            <span>已经点亮 3 盏灯</span>
+            <div class="lamps">
+              <div class="lamp on"></div><div class="lamp on"></div><div class="lamp on"></div>
+              <div class="lamp"></div><div class="lamp"></div>
+              <span class="lbl">3 / 5</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:16px 18px 0;position:relative;z-index:8">
+          <div class="card">
+            <div class="card-h">
+              <b>听到的单词是哪一个？</b>
+              <span class="pill">🐢 慢速 ×0.7</span>
+            </div>
+
+            <div class="player">
+              <div class="speaker"><div class="rip"></div><div class="rip b"></div><div class="tri"></div></div>
+              <div class="wave play"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <div class="bubble">
+                <div class="who">🐱</div>
+                <p>喵喵说：<i>听清楚，它和"流星"很像</i></p>
+              </div>
+            </div>
+
+            <div class="opts">
+              <div class="opt">
+                <div class="ic">🌠</div>
+                <div class="w en">meteor</div>
+                <div class="ph">/ˈmiːtiə(r)/</div>
+              </div>
+              <div class="opt ok">
+                <div class="ic">🏃</div>
+                <div class="w en">marathon</div>
+                <div class="ph">/ˈmærəθən/</div>
+              </div>
+              <div class="opt bad">
+                <div class="ic">🍈</div>
+                <div class="w en">melon</div>
+                <div class="ph">/ˈmelən/</div>
+              </div>
+            </div>
+            <div class="reward-strip">
+              <span>🌸 答对啦！marathon = 马拉松，已收进小花园</span>
+              <b>+1</b>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="foot">
+          <div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+          <button class="btn">👂 听下一句</button>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ============ 页面 2：阅读 ============ -->
+  <div class="col">
+    <div class="col-cap"><i>📖</i> 页面 2 · 阅读 <s>读一读</s></div>
+    <div class="device"><div class="device-inner">
+
+      <div class="statusbar"><span class="en">9:41</span><span class="en">▮▮▮ ⌁ ▰</span></div>
+
+      <div class="body" style="background:linear-gradient(180deg,#F7E9CE 0%,#FBF3E4 40%,#FFFDF7 100%)">
+        <svg viewBox="0 0 375 170" style="position:absolute;left:0;right:0;top:0;width:100%;height:170px;pointer-events:none">
+          <circle cx="306" cy="40" r="38" fill="#FFF3C0" opacity=".85"/>
+          <circle cx="306" cy="40" r="52" fill="#FFF3C0" opacity=".35"/>
+          <path d="M40 132 q22 -26 44 0" fill="none" stroke="#E4D6BC" stroke-width="4" stroke-linecap="round"/>
+          <path d="M62 128 q22 -26 44 0" fill="none" stroke="#E4D6BC" stroke-width="4" stroke-linecap="round"/>
+          <path d="M84 130 q22 -26 44 0" fill="none" stroke="#E4D6BC" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+
+        <div class="nav">
+          <div class="back">‹</div>
+          <div class="seg"><span>👂 听一听</span><span class="on">📖 读一读</span></div>
+          <div class="coin">🪙 1280</div>
+        </div>
+
+        <div class="scene-title" style="padding-top:6px">
+          <span class="tag">📚 故事林 · Lv.2</span>
+          <h2>今天读一本 <u>会说话的书</u></h2>
+        </div>
+
+        <div style="padding:12px 18px 200px;position:relative;z-index:8">
+          <div class="card" style="padding:14px">
+            <div class="book-hero">
+              <div class="cover">
+                <span class="tagx">Level 2</span>
+                <svg viewBox="0 0 96 120" style="position:absolute;inset:0">
+                  <circle cx="62" cy="30" r="16" fill="#FFF3C0"/>
+                  <path d="M0 78 Q24 68 48 78 Q72 88 96 78 L96 120 L0 120Z" fill="#3FA8D4"/>
+                  <path d="M0 92 Q24 84 48 92 Q72 100 96 92 L96 120 L0 120Z" fill="#2E8FC4"/>
+                  <g transform="translate(24,44)">
+                    <ellipse cx="24" cy="26" rx="24" ry="18" fill="#9BD36B" stroke="#4E7A33" stroke-width="3"/>
+                    <path d="M24 8 L24 44 M6 26 L42 26 M12 14 L36 38 M36 14 L12 38" stroke="#4E7A33" stroke-width="2.5" fill="none"/>
+                    <circle cx="50" cy="24" r="9" fill="#FFD86B" stroke="#4E7A33" stroke-width="3"/>
+                    <circle cx="54" cy="22" r="1.8" fill="#3B3226"/>
+                    <path d="M56 28 q6 3 8 -2" stroke="#4E7A33" stroke-width="2.5" fill="none"/>
+                    <path d="M8 34 q-10 2 -12 10" stroke="#4E7A33" stroke-width="3" fill="none"/>
+                    <path d="M34 42 q8 8 16 4" stroke="#4E7A33" stroke-width="3" fill="none"/>
+                  </g>
+                </svg>
+              </div>
+              <div class="bookmeta">
+                <b class="en">The Lost Turtle</b>
+                <div class="cn">走丢的小海龟</div>
+                <div class="meta-row">
+                  <span class="mtag">⏱ 2 分钟</span>
+                  <span class="mtag">📖 46 词</span>
+                  <span class="mtag" style="background:var(--mint);border-color:#3F8F63;color:#2E6B48">✓ 读过 1 遍</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:9px;margin-top:11px">
+              <button class="mini" style="background:var(--sky2)">🔊 朗读全文</button>
+              <button class="mini" style="background:var(--yellow)">📕 生词本 +3</button>
+            </div>
+          </div>
+
+          <div class="card passage" style="margin-top:12px">
+            <div class="card-h" style="padding:0 0 10px;border-bottom:2px dashed #EFE3CB">
+              <b>📖 第 1 / 3 段</b>
+              <span class="pill">👆 点词看意思</span>
+            </div>
+            <div class="pline">
+              <div class="en-line">A little turtle named <b class="hl on">Pip</b> lived near the sea. <span class="spk">🔊</span></div>
+              <div class="cn-line">一只叫皮普的小乌龟住在海边。</div>
+            </div>
+            <div class="pline">
+              <div class="en-line">One morning, the <b class="hl">waves</b> took him far away. <span class="spk">🔊</span></div>
+              <div class="cn-line">一天早上，海浪把他带到了很远的地方。</div>
+            </div>
+            <div class="pline">
+              <div class="en-line">"Don't worry!" said the <b class="hl">gull</b>. "I will help you." <span class="spk">🔊</span></div>
+              <div class="cn-line">"别担心！"海鸥说，"我来帮你。"</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 词卡气泡 -->
+        <div class="sheet">
+          <div class="grab"></div>
+          <div class="wordrow">
+            <b class="en">waves</b>
+            <span class="en">/weɪvz/</span>
+            <span class="pos">名词</span>
+          </div>
+          <div class="sense">海浪；波浪 <em>· 例：The waves are big today.</em></div>
+          <div class="sense" style="color:var(--ink2);font-size:13.5px">今天海浪很大。</div>
+          <div class="sheet-acts">
+            <div class="mini">🔊 听发音</div>
+            <div class="mini" style="background:var(--yellow)">⭐ 收进生词本</div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ============ 组件与状态 ============ -->
+<div class="sheet-wrap">
+  <div class="sec-title"><h3>组件与状态表</h3><s>COMPONENTS</s></div>
+  <div class="sec-note">每个状态都保留"下一步该做什么"的明确动词按钮；错误态不惩罚，只提供慢速重听与答案解释。</div>
+  <div class="grid">
+
+    <div class="tile">
+      <h4>① 听力答对 <em>CORRECT</em></h4>
+      <div class="demo">
+        <div class="face" style="background:var(--mint);border-color:#3F8F63">✅</div>
+        <div style="flex:1">
+          <b style="font-size:15px;font-weight:900;display:block">答对啦！</b>
+          <span style="font-size:13px;font-weight:800;color:var(--ink2)">marathon = 马拉松，已收进小花园</span>
+        </div>
+        <div style="font-size:16px;font-weight:900;color:#8A6B1E">+1 🌸</div>
+      </div>
+      <p>答对后 <b>立刻</b> 展示单词含义与音标，趁热把词收进生词本，这是听力→词汇的唯一入口。</p>
+    </div>
+
+    <div class="tile">
+      <h4>② 听力答错 <em>RETRY</em></h4>
+      <div class="demo">
+        <div class="face" style="background:var(--pink);border-color:#C4536A">🐢</div>
+        <div style="flex:1">
+          <b style="font-size:15px;font-weight:900;display:block">是「melon」哦</b>
+          <span style="font-size:13px;font-weight:800;color:var(--ink2)">m-e-l-o-n，西瓜。和 meteor 慢慢对比一次</span>
+        </div>
+      </div>
+      <p>错时<b>不扣分、不倒扣</b>：把正确项高亮 + 对比两个相似词 + 自动播一遍慢速，再进入下一句。</p>
+    </div>
+
+    <div class="tile">
+      <h4>③ 读完结算 <em>REWARD</em></h4>
+      <div class="demo">
+        <div class="face" style="background:var(--yellow)">🌸</div>
+        <div style="flex:1">
+          <b style="font-size:15px;font-weight:900;display:block">读完了！皮普回家了</b>
+          <span style="font-size:13px;font-weight:800;color:var(--ink2)">3 道小题答对 2 道</span>
+        </div>
+        <div style="font-size:16px;font-weight:900;color:#8A6B1E">🌸×2</div>
+      </div>
+      <p>读完故事 → 3 道小题 → 结算页给奖励与"下一本"，把阅读做成一个可完成的小任务。</p>
+    </div>
+
+    <div class="tile">
+      <h4>④ 词卡气泡 <em>WORD SHEET</em></h4>
+      <div class="demo" style="flex-direction:column;align-items:stretch;gap:8px">
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <b class="en" style="font-size:21px;font-weight:900">waves</b>
+          <span class="en" style="font-size:13px;font-weight:800;color:var(--ink2)">/weɪvz/</span>
+          <span style="margin-left:auto;font-size:11px;font-weight:900;padding:3px 8px;border-radius:8px;background:var(--sky2);border:2px solid var(--line-s)">名词</span>
+        </div>
+        <div style="font-size:14px;font-weight:800">海浪；波浪</div>
+      </div>
+      <p>点正文任意单词即弹出：音标 + 词性 + 中文释义 + 例句 + 朗读 + 收藏，四件套一次给全。</p>
+    </div>
+
+    <div class="tile">
+      <h4>⑤ 进度灯 <em>PROGRESS</em></h4>
+      <div class="demo">
+        <div class="lamps" style="margin:0">
+          <div class="lamp on"></div><div class="lamp on"></div><div class="lamp"></div><div class="lamp"></div>
+        </div>
+        <span style="font-size:13px;font-weight:800;color:var(--ink2)">3 / 5 句</span>
+      </div>
+      <p>不用百分比数字，用"点亮的灯"表达进度——一眼看出还剩多少，小学生不读分数。</p>
+    </div>
+
+    <div class="tile">
+      <h4>⑥ 空态与异常 <em>EMPTY</em></h4>
+      <div class="demo">
+        <div class="face" style="background:var(--cream)">🏝️</div>
+        <div style="flex:1">
+          <b style="font-size:15px;font-weight:900;display:block">这片林子还没长新书</b>
+          <span style="font-size:13px;font-weight:800;color:var(--ink2)">先去回声谷听 5 句，山谷会送来一本</span>
+        </div>
+      </div>
+      <p>空态不是"暂无数据"，而是把两个模块串起来互相引流，避免出现断头路。</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ 交互流程 ============ -->
+<div class="tb-wrap">
+  <div class="sec-title"><h3>交互流程</h3><s>FLOWS</s></div>
+  <div class="sec-note">两条线都遵循同一节奏：<b>听 / 看 → 做一个动作 → 得到一个可见的收获</b>，没有任何一步是纯浏览。</div>
+
+  <table>
+    <tr><th style="width:130px">线</th><th>主流程</th><th style="width:280px">关键交互</th><th style="width:230px">完成反馈</th></tr>
+    <tr>
+      <td><b>👂 听一听</b></td>
+      <td>
+        <div class="flow"><b>选关（主题/课本）</b><s>→</s><b>播放声音</b><s>→</s><b>三选一</b><s>→</s><b>对答案</b><s>→</s><b>收词</b><s>→</s><b>下一句</b></div>
+        每关 5 句，可无限次重听；3 种题型轮换：<code>听词选词</code> / <code>听句选图</code> / <code>听音排序</code>。
+      </td>
+      <td>主播放键 104px（小孩手指目标 ≥ 80px）；播放时声波跳动 + 长按可拖动进度；0.7× 慢速常驻</td>
+      <td>答对弹 <b>🌸+1</b> 并自动收入花园；5 句全对点亮 5 盏灯 + 🪙×10</td>
+    </tr>
+    <tr>
+      <td><b>📖 读一读</b></td>
+      <td>
+        <div class="flow"><b>选绘本</b><s>→</s><b>逐句读（中英对照）</b><s>→</s><b>点词查义</b><s>→</s><b>收生词</b><s>→</s><b>3 道小题</b><s>→</s><b>结算领奖</b></div>
+        段落高亮跟随朗读；长句自动分句高亮。
+      </td>
+      <td>点词弹底部气泡（不遮挡正文）；整段可整句朗读；生词本一键收集，收集后正文该词变绿</td>
+      <td>结算页给 🌸×2 / 💎×1，并推荐"下一本"（同难度 + 同主题）</td>
+    </tr>
+  </table>
+
+  <div class="sec-title" style="margin-top:44px"><h3>状态与异常</h3><s>STATES</s></div>
+  <table>
+    <tr><th style="width:150px">状态</th><th>触发条件</th><th style="width:420px">界面表现</th></tr>
+    <tr><td><b>加载中</b></td><td>音频 / 绘本拉取中</td><td>骨架屏 + 播放键显示转圈；不出现空白页</td></tr>
+    <tr><td><b>无网络</b></td><td>请求失败</td><td>顶部细条提示"没网啦，已为你缓存好 5 句"，播放本地缓存，不阻断</td></tr>
+    <tr><td><b>空态</b></td><td>该主题无内容</td><td>场景化插画 + 引导去另一个模块（见组件表 ⑥）</td></tr>
+    <tr><td><b>答错</b></td><td>选择错误</td><td>正确项高亮 + 相似词对比 + 自动慢速重播；不扣金币</td></tr>
+    <tr><td><b>已通关</b></td><td>同一关第 3 次进入</td><td>顶部提示"这关你已经点亮啦，要不要挑战更快的？"，给"速度模式"入口</td></tr>
+  </table>
+
+  <div class="sec-title" style="margin-top:44px"><h3>数据字段与埋点</h3><s>DATA &amp; EVENTS</s></div>
+  <table>
+    <tr><th style="width:190px">对象</th><th style="width:360px">关键字段</th><th>埋点</th></tr>
+    <tr>
+      <td><b>听力题 item</b></td>
+      <td><code>id</code> <code>type</code>(word/pic/order) <code>wordId</code> <code>audioUrl</code> <code>slowAudioUrl</code> <code>options[]</code> <code>answer</code> <code>distractor[]</code></td>
+      <td><code>listen_play</code> <code>listen_answer</code> <code>listen_retry</code> <code>listen_slow</code></td>
+    </tr>
+    <tr>
+      <td><b>绘本 book</b></td>
+      <td><code>id</code> <code>title</code> <code>titleCn</code> <code>level</code> <code>wordCount</code> <code>readMin</code> <code>audioUrl</code> <code>sentences[]</code> <code>quiz[]</code></td>
+      <td><code>read_open</code> <code>read_word_tap</code> <code>read_word_collect</code> <code>read_finish</code> <code>read_quiz</code></td>
+    </tr>
+    <tr>
+      <td><b>生词本 word</b></td>
+      <td><code>word</code> <code>phonetic</code> <code>pos</code> <code>meaningCn</code> <code>exampleEn</code> <code>exampleCn</code> <code>from</code>(listen/read) <code>correctCount</code></td>
+      <td>收集时带 <code>from</code>，用于判断"听读联动"词占比</td>
+    </tr>
+  </table>
+
+  <div class="sec-title" style="margin-top:44px"><h3>为什么这样设计</h3><s>RATIONALE</s></div>
+  <table>
+    <tr><th style="width:210px">决策</th><th>理由</th></tr>
+    <tr><td><b>一个页面两个 Tab，而不是两个入口</b></td><td>听与读在语言学习里是同一件事的两面（输入的两条通道）。分开做入口会让首页变成功能罗列——这正是前 7 版被否掉的原因。</td></tr>
+    <tr><td><b>用"点亮 / 收集"替代"正确率 / 分数"</b></td><td>小学生看不懂分数，但看得懂"灯亮了、花又多了一朵"。奖励必须<em>可见、可累计</em>，直接接回花园系统。</td></tr>
+    <tr><td><b>答题只做三选一</b></td><td>目标用户是小学生，选项一多就乱。四选一/拼写属于更高年级，留到 Lv.4 以后解锁。</td></tr>
+    <tr><td><b>阅读用中英对照而不是纯英文</b></td><td>过渡期读物（Level 1–2）需要中文做脚手架；Level 3 起自动隐藏中文行，按水平渐进。</td></tr>
+    <tr><td><b>错误不惩罚</b></td><td>用金币惩罚会造成"不敢答"。改为"不扣分 + 自动慢速重播 + 相似词对比"，把错误变成教学点。</td></tr>
+    <tr><td><b>二级页不放底部 Tab</b></td><td>底部 Tab 保留给词库 / 花园 / 伙伴 / 勋章四个主场景；听读是任务页，专注完成任务后立刻返回，避免中途分心。</td></tr>
+  </table>
+
+  <div class="footer-note">小芽背单词 · 单词岛 —「听读岛」页面设计 v1 · 2026-11-16 · 视觉沿用 H 暖岛手绘体系</div>
+</div>
+
+</body>
+</html>
